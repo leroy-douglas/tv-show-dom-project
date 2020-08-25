@@ -1,3 +1,53 @@
+html{
+  font-size: 62.5%;
+}
+
+body{
+  font-family: 'PT Serif', serif;
+  
+  color: black;
+  padding: 0;
+  margin: 0;
+  background-color: #62B6CB;
+}
+
+h1, h2, h3, h4 {
+  padding: 0;
+  margin: 0;
+}
+
+.ep-title{
+  font-family: 'Poppins', sans-serif;
+  background-color: #1B4965;
+  color: #62B6CB;
+  border-radius: 25px 25px 0 0;
+  text-align: center;
+  padding: 1rem 0 1rem 0;
+}
+
+.ep-image{
+  width: 80%;
+  display: block;
+  border-radius: 5px 5px 5px 5px;
+  margin: 1.5em auto 0;
+}
+
+.ep-summary{
+  font-size: 1rem;
+  margin: 1.9em;
+}
+
 #root {
-  color: red;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.ep-container{
+  width: 100%;
+  background-color: #CAE9FF;
+  border-radius: 25px 25px 15px 15px;
+  width: 28%;
+  margin-top: 2em;
+  margin-bottom: 1em;
 }
