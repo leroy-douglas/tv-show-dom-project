@@ -1,19 +1,97 @@
+:root{
+  --header-controls-font-size: 2rem;
+  --search-control-height: 36px;
+  --list-control-height: 42px;
+
+  --episode-counter-height: 30px;
+  --episode-counter-width: 150px;
+  
+  --episode-container-width: 450px;
+  --episode-container-height: 550px;
+  --episode-title-font-size: 1em;
+}
+
 html{
-  font-size: 62.5%;
+  font-size: 10px;
+}
+
+html, body {
+  height: 100%;
 }
 
 body{
+  display: flex;
+  flex-direction: column;
   font-family: 'PT Serif', serif;
-  
+  font-size: 1.6rem;
   color: black;
   padding: 0;
   margin: 0;
   background-color: #62B6CB;
 }
 
+
 h1, h2, h3, h4 {
   padding: 0;
   margin: 0;
+}
+
+.header{
+  background-color: #1B4965;
+  border-radius: 0 0 25px 25px;
+  margin-bottom: 6rem;
+  margin-left: 1px;
+  margin-right: 1px;
+  box-sizing: border-box;
+}
+.controls-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  width: 80%;
+  margin: 0 auto;
+  
+  box-sizing: border-box;
+  order: 0;
+}
+
+.search-wrapper{
+  display: flex;
+  order: 1;
+  padding: 2rem 0 2rem 2rem;
+}
+
+#ep-count{
+  font-size: var(--header-controls-font-size);
+  background-color: #62B6CB;
+  color:  #000;
+  border-radius: 3px 3px 3px 3px;
+  width: var(--episode-count-width);
+  height: var(--episode-counter-height);
+  text-align: center;
+  vertical-align: center;
+  margin-left: 10px;
+  padding: 5px;
+  order: 1;
+}
+
+
+#ep-list{
+  height: var(--list-control-height);
+  margin-top: 2rem;
+  order: 0;
+}
+
+#ep-search{
+  order: 0;
+  height: var(--search-control-height);
+  margin-left: 10px;
+}
+
+#ep-list, #ep-search, #ep-count{
+  display: block;
+  font-size: var(--header-controls-font-size);
+  background-color: #62B6CB;
 }
 
 .ep-title{
@@ -22,32 +100,62 @@ h1, h2, h3, h4 {
   color: #62B6CB;
   border-radius: 25px 25px 0 0;
   text-align: center;
-  padding: 1rem 0 1rem 0;
+  padding: 1rem 0;
 }
 
 .ep-image{
-  width: 80%;
+  width: 90%;
   display: block;
   border-radius: 5px 5px 5px 5px;
   margin: 1.5em auto 0;
 }
 
 .ep-summary{
-  font-size: 1rem;
-  margin: 1.9em;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin: 0 4rem;
 }
 
 #root {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  flex: 1 1 var(--episode-container-width);
+  width: 80%;
+  margin: 0 auto;
 }
 
 .ep-container{
-  width: 100%;
+  width: var(--episode-container-width);
+  height: var(--episode-container-height);
   background-color: #CAE9FF;
   border-radius: 25px 25px 15px 15px;
-  width: 28%;
   margin-top: 2em;
-  margin-bottom: 1em;
+}
+
+
+
+#footer{
+  background-color: #1B4965;
+  color:  #62B6CB;
+  height: 70px;
+  margin-top: 5rem;
+  margin-left: 1px;
+  margin-right: 1px;
+  bottom: 0px;
+  padding:2rem 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: 25px 25px 0 0;
+}
+
+#footer a, #footer a:link, #footer {
+  text-decoration: none;
+  color:  #62B6CB;
+  text-align: center;
+  padding-top: 2rem;
+}
+
+#footer a:hover{
+  color:#CAE9FF;
 }
