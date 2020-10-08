@@ -1,69 +1,66 @@
+/*
+ * Shows(_shows, _allShowsContainer)
+ *          - _shows: reference to the shows array
+ *          - _allShowsContainer: the DOM element that holds all the individual shows DOM elements
+ * 
+ *  Shows() is normally called without arguments...declare both variables as closure items for the event handlers
+ * 
+ * This object responds to the following events:
+ *      "display-shows": a request to display all the shows, and then request the counter to show # of shows
+ *      "view-episodes": hides shows as episodes data is about to be displayed
+ *      "click"               : clicked on show, send request to get episodes for the selected show
+ *      "select-ready"   : request from select input element to send shows data
+ *      "search-ready"  : request from search bar element to send shows data
+ *      "counter-ready" : request from counter element to send shows data
+ * 
+ */
+
 function Shows(_shows = null, _allShowsContainer = null) {
     this.renderElement = document.getElementById("root");
-    console.log("compare: ", typeof compare, compare)
-    _shows = getAllShows().sort(compare);
-    console.log(_shows)
+    _shows = getAllShows().sort(compare)
     _allShowsContainer = document.createElement("div");
     _allShowsContainer.setAttribute("id", "all-shows");
     _allShowsContainer.style.display = "block";
-    //let allShowsContainer = null;
     
     document.getElementById("root").appendChild(_allShowsContainer);
 
     document.getElementById("root").addEventListener("display-shows", (event) => {
-        console.log("allShowsContainer: (event received)", _allShowsContainer)
-        console.log("GOT request to display shows event");
         const sendShowsCount = new CustomEvent("shows-counter", { detail: _shows.length });
         document.getElementById("root").dispatchEvent(sendShowsCount);
         this.showAllShowsContent();
     });
 
-
     document.getElementById("root").addEventListener("view-episodes", (event) => {
-        console.log("received view-episodes EVENT")
         this.hideAllShowsContent();
     });
 
     document.getElementById("all-shows").addEventListener("click", (event) => {
-        // console.log(event.composedPath())
-        //console.log(event.composedPath().includes("show-container"))
         if( _allShowsContainer.style.display === "none"){
             return;
         }
         let eventElements = event.composedPath().find(path => path.className === "show-container")
         let showID = eventElements.children[0].id;
-        //console.log(ids.id, showID)
-        //console.log(eventElements.children);
-        //console.log(showID)
-        //console.log(event.composedPath()[2].id)
-        //let showID = showTitle.getAttribute("id");
-        //console.log("showID", showID);
-        //getAllEpisodes(showID);
         this.hideAllShowsContent();
         const getEpisodes = new CustomEvent("get-episodes", { detail: showID });
         document.getElementById("root").dispatchEvent(getEpisodes);
     });
 
     document.getElementById("root").addEventListener("select-ready", (event) => {
-        console.log("select-ready: (event received)")
         const sendShows = new CustomEvent("shows-avail", { detail: _shows });
         document.getElementById("root").dispatchEvent(sendShows);
     }); 
 
     document.getElementById("root").addEventListener("search-ready", (event) => {
-        console.log("search-ready: (event received)")
         const sendShows = new CustomEvent("shows-search", { detail: _shows });
         document.getElementById("root").dispatchEvent(sendShows);
     });
 
     document.getElementById("root").addEventListener("counter-ready", (event) => {
-        console.log("counter-ready: (event received)")
         const sendShowsCount = new CustomEvent("shows-counter", { detail: _shows.length });
         document.getElementById("root").dispatchEvent(sendShowsCount);
     });
 
     this.createStats = function(stats) {
-        //console.log(stats)
         const statsContainer = document.createElement("div");
         statsContainer.className = "show-stats";
         const status = document.createElement("p");
@@ -84,7 +81,6 @@ function Shows(_shows = null, _allShowsContainer = null) {
         const genres = document.createElement("p");
         genres.className = "show-genres";
         genres.classList.add("status");
-        //console.log(stats.genres)
         genres.textContent = `Genres: ${stats.genres.join(" / ")}`;
         statsContainer.appendChild(genres);
         return statsContainer;
@@ -117,24 +113,12 @@ function Shows(_shows = null, _allShowsContainer = null) {
 
     this.createTitle = function(title){
         let showTitle = document.createElement("h2");
-        //showTitle.setAttribute("id", title);
         showTitle.className = "show-title";
         showTitle.textContent = title;
-
-        /* showTitle.addEventListener("click", (event) => {
-            let showID = showTitle.getAttribute("id");
-            console.log("showID", showID)
-            getAllEpisodes(showID) ;
-        }); */
         return showTitle;
     }
 
     this.hideAllShowsContent = function(){
-        /* showContainers.forEach((container) => {
-          if (container.style.display === "block") {
-            container.style.display = "none";
-          }
-        }); */
         _allShowsContainer.style.display = 'none';
     }
 
@@ -151,12 +135,6 @@ function Shows(_shows = null, _allShowsContainer = null) {
         document.getElementById("root").appendChild(_allShowsContainer);
 
         _shows.forEach(show => {
-            //console.log(show);
-            /* if( ( 'image' in show)  === false)
-              return;
-            if ( (show.image === null) || ('medium' in show.image)  === false )
-              return; */
-            //console.log(show);
             const showContainer = document.createElement("div");
             showContainer.className = "show-container";
             showContainer.setAttribute("id", show.name);
@@ -186,7 +164,6 @@ function Shows(_shows = null, _allShowsContainer = null) {
                 showImage = this.createImage("no-image");
             } else showImage = this.createImage(show.image.medium);
 
-            //showImage = this.createImage(show.image.medium);
             imageStatsContainer.appendChild(showImage);
 
             let stats = {
@@ -204,7 +181,5 @@ function Shows(_shows = null, _allShowsContainer = null) {
         });
 
         showContainers = document.querySelectorAll(".show-container");
-        //setCount("Show", this.showList.length);
-    //return this;
     }
 }

@@ -1,3 +1,21 @@
+/*
+ * Episodes(_episodes, _allEpisodesContainer)
+ *          - _episodes: reference to the episodes array
+ *          - _allEpisodesContainer: the DOM element that holds all the individual episode DOM elements
+ *
+ *  Episodes() is normally called without arguments...declare both variables as closure items for the event handlers
+ *
+ * This object responds to the following events:
+ *      "show-all-episodes": a request to display all the episodes, and then request the counter to show # of episodes
+ *      "show-one-episode": a request to display one episode, and then request the counter to show 1 episode
+ *       "view-episodes"     : hides shows as episodes data is about to be displayed
+ *       "display-shows"     : shows data about to be displayed, let's hide the episodes
+ *       "recv-episodes"      : request from search bar element to send shows data
+ *       "counter-ready"     : request from counter element to send shows data
+ *
+ */
+
+
 function Episodes(_episodes = null, _allEpisodesContainer = null) {
      _allEpisodesContainer = document.createElement("div");
     _allEpisodesContainer.setAttribute("id", "all-episodes");
@@ -5,7 +23,6 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
     let episodeContainers = null;
 
     document.getElementById("root").appendChild(_allEpisodesContainer);
-    console.log("allEpisodesContainer: ", _allEpisodesContainer)
 
     document.getElementById("root").addEventListener("show-all-episodes", (event) => {
         this.showAllEpisodesContent();
@@ -15,7 +32,6 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
 
     document.getElementById("root").addEventListener("show-one-episode", (event) => {
         let episodeID = event.detail;
-        console.log("show-one-episode EVENT - episode id", episodeID)
         this.showIndividualEpisodeContent(episodeID);
         const oneEpisode = new Event("one-episode");
         document.getElementById("root").dispatchEvent(oneEpisode);
@@ -23,29 +39,18 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
 
     document.getElementById("root").addEventListener("display-shows", (event) => {
         this.hideAllEpisodesContent();
-        /* const displayShows = new CustomEvent("display-shows");
-        document.getElementById("all-episodes").dispatchEvent(displayShows); */
     });
 
     document.getElementById("root").addEventListener("recv-episodes", (event) => {
-        console.log("Episodes() GOT new episodes RECIEVED event", event.detail);
         _episodes = event.detail;
-        
-        
-
-        console.log(_episodes);
         this.removeEpisodeContent();
         this.addEpisodesContent();
-        console.log("Episodes() sending episodes search event");
         const sendEpisodes = new CustomEvent("episodes-search", { detail: _episodes });
         document.getElementById("root").dispatchEvent(sendEpisodes);
     });
 
     document.getElementById("root").addEventListener("get-episodes", (event) => {
-        console.log("allEpisodesContainer: (event received)", _allEpisodesContainer)
-        console.log("GOT request for new episodes event", event.detail);
         let showID = event.detail;
-        console.log("show ID:", showID);
         this.getAllEpisodes(showID);
     });
 
@@ -59,8 +64,6 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
                 container.style.display = "none";
             }
         });
-
-        //setCount("Episode", 1);
     }
 
     this.showAllEpisodesContent = function(){
@@ -70,12 +73,10 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
             }
         });
         _allEpisodesContainer.style.display = "flex";
-        //setCount("Episode", episodes.episodeList.length);
     }
 
     this.hideAllEpisodesContent = function() {
         _allEpisodesContainer.style.display = "none";
-        //setCount("Episode", episodes.episodeList.length);
     }
 
     this.getEpisodeText = function(ep) {
@@ -118,21 +119,17 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
 
     this.addEpisodesContent = function() {
         let documentFragment = document.createDocumentFragment();
-       // _allEpisodesContainer.setAttribute("display", "flex");
         _allEpisodesContainer.style.display = "flex";
 
         documentFragment.appendChild(_allEpisodesContainer);
         let summaryCount = 0;
-        console.log("addEpisodesContent", _episodes)
+
         _episodes.forEach(episode => {
             if ("summary" in episode === false || episode.summary === null) {
-                //console.log("summary does not exist",episode)
                 return;
             }
 
             if (episode.summary.length < 1) {
-                /* console.log(episode)
-                console.log("summary",episode.summary) */
                 return;
             }
 
@@ -144,7 +141,7 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
             episodeContainer.style.display = "block";
             let titleElement = this.createTitle(this.getEpisodeText(episode));
 
-            let imageElement = null;  //this.createImage(episode.image.medium);
+            let imageElement = null;
             if ((('image' in episode) === false) || (episode.image === null) ||
                 (('medium' in episode.image) === false) || (episode.image.medium === null)
             )
@@ -160,37 +157,24 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
             episodeContainer.appendChild(titleElement);
             episodeContainer.appendChild(imageElement);
             episodeContainer.appendChild(summaryElement);
-            //this.setEpisodeCount(this.episodeList.length);
         });
 
-        //_allEpisodesContainer.setAttribute("display", "flex");
         document.getElementById("root").appendChild(documentFragment);
         episodeContainers = document.querySelectorAll(".ep-container");
-        console.log(_allEpisodesContainer)
-        /* console.log("Episode Count = ", summaryCount)
-        console.log("addEpisodesContent()", episodeContainers); */
-        //setCount("Episode", this.episodeList.length);
 
         return this;
     }
 
     this.getAllEpisodes = function (showID) {
-        //let showID = allShows[0].id;
-        //("getAllEpisodes(GETTING EPISODES)");
         fetch(`https://api.tvmaze.com/shows/${showID}/episodes`)
             .then((response) => response.json().then((data) => data))
             .then((allEpisodes) => {
-                console.log(allEpisodes)
-
                 allEpisodes = allEpisodes.filter((episode) => {
                     if ("summary" in episode === false || episode.summary === null) {
-                        //console.log("summary does not exist", episode);
                         return false;
                     }
 
                     if (episode.summary.length < 1) {
-                        //console.log(episode);
-                        //console.log("summary", episode.summary);
                         return false;
                     }
                     return true;
@@ -210,17 +194,13 @@ function Episodes(_episodes = null, _allEpisodesContainer = null) {
                     }
                 });
 
-                //episodes.episodeList = allEpisodes;
-                //console.log("getAllEpisodes(EPISODES RETRIEVED)");
                 const episodesReceived = new CustomEvent("recv-episodes", {
                     detail: allEpisodes,
                 });
-                //document.getElementById("all-episodes").dispatchEvent(episodesReceived);
+
                 document
                     .getElementById("root")
                     .dispatchEvent(episodesReceived);
-
-                console.log("getAllEpisodes(): ", allEpisodes)
             })
             .catch((error) => {
                 console.log("Yep we caught an ERROR", error);

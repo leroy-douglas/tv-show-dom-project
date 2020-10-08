@@ -1,3 +1,16 @@
+/*
+ * EpisodeSelect(_episodes, _element)
+ *          - _episodes: reference to the episodes array
+ *          - _element: the DOM element for input select
+ *
+ *  EpisodeSelect() is normally called without arguments...declare both variables as closure items for the event handlers
+ *
+ * This object responds to the following events:
+ *      "display-shows": a request to hide all the episodes, as we are about to display the shows
+ *      "change": standard event for a select input
+ * 
+ */
+
 function EpisodeSelect(_episodes = null, _element = null) {
     _element = document.createElement("select");
     _element.setAttribute("id", "ep-select");
@@ -5,9 +18,7 @@ function EpisodeSelect(_episodes = null, _element = null) {
     _element.style.display = "none";
 
     document.getElementById("root").addEventListener("recv-episodes", (event) => {
-        console.log("GOT  episodes RECIEVED event", event.detail);
         _episodes = event.detail;
-        console.log(_episodes);
         this.removeOptions();
         this.addOptions();
         _element.style.display = "block";
@@ -21,36 +32,19 @@ function EpisodeSelect(_episodes = null, _element = null) {
             let selectOptionIndex =
                 event.target.options[event.target.selectedIndex].index;
             const ALL_EPISODES = 0;
-            //alert(selectOptionIndex)
+
             if (selectOptionIndex === ALL_EPISODES) {
                 // All Episodes
-                console.log("ShowSelect() - Selected All Episodes")
-                const showAllEpisodes = new CustomEvent("show-all-episodes" /*, {
-          detail: allEpisodes,
-        } */);
+                const showAllEpisodes = new Event("show-all-episodes");
                 document.getElementById("root").dispatchEvent(showAllEpisodes);
-                // _episodes.showAllEpisodesContent();
-                //this.setEpisodeCount(episodes.episodeList.length);
-                //setCount("Episode", episodes.episodeList.length);
             } else {
-                //episodes.showIndividualEpisodeContent(selectOptionIndex - 1);
-                console.log("ShowSelect() - Selected one Episode: ", selectOptionIndex)
                 const showOneEpisode = new CustomEvent(
                     "show-one-episode", {
                     detail: (selectOptionIndex - 1),
                 });
                 document.getElementById("root").dispatchEvent(showOneEpisode);
-                //this.setEpisodeCount(1);
-                //setCount("Episode", 1);
             }
         });
-        /*
-    allEpisodesContainer.addEventListener("new-data", (event) => {
-          console.log("new-data event received", event.detail);
-          _episodes = event.detail;
-        console.log(_episodes);
-        });
-    */
     
     this.getEpisodeText = function (ep) {
       let season = ep.season.toString().padStart(2, "0");
@@ -62,7 +56,7 @@ function EpisodeSelect(_episodes = null, _element = null) {
         if (_element.options.length === 0) return;
 
         let lastOption = _element.options.length - 1;
-        //console.log("numOfOptions", numOfOptions)
+
         for (let option = lastOption; option >= 0; option--) {
             _element.remove(option);
         }
@@ -90,5 +84,3 @@ function EpisodeSelect(_episodes = null, _element = null) {
         return _element;
     };
 }
-
-

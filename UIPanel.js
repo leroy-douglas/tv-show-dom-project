@@ -5,24 +5,9 @@ function viewShowsButton() {
     viewShowsBtn.style.display = "none";
     
     viewShowsBtn.addEventListener("click", event => {
-        //console.log(showSelect.options);
-        /* showSelect.selectedIndex = 0;
-        showSelect.style.display = "block"; */
-        
-        //episodeSelect.style.display = "none";
         const displayShows = new Event("display-shows");
         document.getElementById("root").dispatchEvent(displayShows);
-        
-/*
-        const hideEpisodes = new Event("hide-episodes");
-        document.getElementById("root").dispatchEvent(hideEpisodes);
-*/
         viewShowsBtn.style.display = "none";
-        ///allShowsContainer.style.display = "block";
-        //allEpisodesContainer.style.display = "none";
-        /* searchBox.value = "";
-        setCount("show", shows.showList.length);
-        shows.showAllShowsContent(); */
     });
 
     document.getElementById("root").addEventListener("recv-episodes", (event) => {
@@ -42,20 +27,17 @@ _viewShowsBtn
     _counter = new MovieCounter().getElement();
 
     (this.createUIPanel = function () {
-        console.log("createUIPlanel");
         const rootElement = document.getElementById("root");
         const body = document.querySelector("body");
         body.setAttribute("id", "body");
 
         const header = document.createElement("header");
-        console.log(header);
         header.className = "ui-panel";
 
         const uiContainer = document.createElement("div");
         uiContainer.className = "ui-container";
         header.appendChild(uiContainer);
 
-        
         const selectContainer = document.createElement("div");
         selectContainer.className = "select-container";
 
@@ -75,8 +57,6 @@ _viewShowsBtn
     })
 
     this.getShowSelect = function () { return _showSelect; }
-    //this.getEpisodeSelect = function () { return _episodeSelect; }
-    //this.getSearchBox = function () { return _searchBox; }
 
     return this;
 }
